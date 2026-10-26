@@ -1,0 +1,71 @@
+/* Base: reset, tipografía, foco visible y formularios (RNF-07, RNF-08). */
+*, *::before, *::after { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  min-width: 1024px; /* RNF-07: utilizable desde 1024 px */
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: var(--fuente-texto);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+h1, h2, h3 { margin: 0; line-height: 1.2; }
+p { margin: 0; }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+
+/* Foco visible de 3 px (design §4.5) */
+:focus { outline: none; }
+:focus-visible {
+  outline: 3px solid var(--color-foco);
+  outline-offset: 2px;
+  border-radius: var(--radio-chico);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.mono { font-family: var(--fuente-mono); }
+
+/* Campos de texto */
+.campo { display: flex; flex-direction: column; gap: var(--espacio-2); min-width: 0; }
+.campo > label, .campo > .etiqueta, fieldset.campo > legend {
+  font-weight: 650;
+  font-size: 14px;
+  padding: 0;
+}
+.requerido { color: var(--color-rechazado); margin-left: 2px; }
+.opcional { color: var(--color-texto-suave); font-weight: 400; margin-left: 6px; }
+
+.entrada {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-borde-fuerte);
+  border-radius: var(--radio-chico);
+  background: var(--color-tarjeta);
+}
+.entrada::placeholder { color: var(--color-texto-suave); }
+textarea.entrada { min-height: 88px; resize: vertical; }
+.entrada:disabled { background: var(--color-superficie); color: var(--color-texto-suave); cursor: not-allowed; }
+.entrada[aria-invalid="true"] { border-color: var(--color-rechazado); box-shadow: 0 0 0 1px var(--color-rechazado); }
+
+.error-campo { color: var(--color-rechazado); font-size: 13.5px; font-weight: 600; }
+.error-campo:empty { display: none; }
+.ayuda { color: var(--color-texto-suave); font-size: 13.5px; }
+
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }

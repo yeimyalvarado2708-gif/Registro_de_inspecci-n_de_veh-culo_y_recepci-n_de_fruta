@@ -1,0 +1,324 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "data-contract.json",
+  "title": "Contrato de datos · Registro de inspección de vehículo y recepción de fruta",
+  "description": "Contrato de datos de la aplicación web que digitaliza el formulario FO-AS-07 de Alimentos Bermúdez S.A. Fuente: Minuta de levantamiento de requerimientos del 16 de octubre de 2026. Los campos que la minuta describe como 'vacíos' se representan con null.",
+  "version": "1.0.0",
+
+  "x-fuente": {
+    "documento": "Minuta alimentos bermudez",
+    "fechaSesion": "2026-10-16",
+    "cliente": "Alimentos Bermúdez S.A.",
+    "participantes": ["Lic. Jackeline Pérez", "Ing. Yeimy Alvarado"]
+  },
+
+  "x-formulario": {
+    "codigo": "FO-AS-07",
+    "nombre": "Registro de inspección de vehículo y recepción de fruta",
+    "elaboradoPor": "Jefe de Calidad",
+    "version": 13,
+    "validoDesde": "2025-07-08",
+    "ultimaRevision": "2025-07-08",
+    "proximaRevision": "2027-07-08"
+  },
+
+  "x-almacenamiento": {
+    "medio": "localStorage",
+    "zonaHoraria": "America/Costa_Rica (UTC-6)",
+    "reglas": [
+      "La inspección se guarda desde el primer dato ingresado y se actualiza con cada cambio, aunque no esté completa (RF-09, CT-03).",
+      "Cada lote se guarda al presionar Guardar lote (RF-09); los cambios que el sistema aplica a los lotes por un cambio en el chequeo se guardan de inmediato (RN-12).",
+      "Solo puede existir un registro sin horaFin a la vez (RN-13, CT-07).",
+      "Un registro es finalizado cuando tiene horaFin; solo los finalizados aparecen en las consultas (RN-10).",
+      "Cancelar registro elimina la inspección en curso y todos sus lotes, incluidos los rechazados (RN-14).",
+      "Si no hay espacio en localStorage, el lote o el cambio no se da por guardado (CT-11).",
+      "Un registro guardado que no se puede leer se omite con un aviso (CT-12)."
+    ]
+  },
+
+  "x-configuracion": {
+    "descripcion": "Valores que se leen de un archivo de configuración de la aplicación (RF-02).",
+    "inspectores": {
+      "fuente": "src/config/inspectores.js",
+      "exportacion": "INSPECTORES",
+      "tipo": "array de string",
+      "descripcion": "Única fuente de la lista de inspectores (RF-02, REQ-TEC-06). El contrato no repite los nombres para evitar dos fuentes de verdad."
+    }
+  },
+
+  "type": "object",
+  "properties": {
+    "inspeccion": { "$ref": "#/$defs/InspeccionVehiculo" },
+    "lotes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/LoteMateriaPrima" }
+    }
+  },
+  "required": ["inspeccion", "lotes"],
+
+  "$defs": {
+    "UUID": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "Fecha": {
+      "description": "Fecha en formato YYYY-MM-DD.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "FechaHora": {
+      "description": "Fecha y hora en formato YYYY-MM-DDTHH:mm, 24 h, hora de Costa Rica (CT-04).",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T([01]\\d|2[0-3]):[0-5]\\d$"
+    },
+    "TextoNoVacio": {
+      "description": "Texto sin espacios al inicio o al final; un texto con solo espacios cuenta como vacío (CT-14).",
+      "type": "string",
+      "pattern": "^\\S(?:.*\\S)?$"
+    },
+    "TextoMayusculas": {
+      "description": "Texto en mayúsculas y sin espacios al inicio o al final (CT-08).",
+      "type": "string",
+      "pattern": "^(?!.*[a-záéíóúüñ])\\S(?:.*\\S)?$"
+    },
+    "Producto": {
+      "description": "Enumeración cerrada; los literales se guardan exactamente así, con tilde en Plátano.",
+      "type": "string",
+      "enum": ["Banano", "Plátano", "Yuca", "Malanga"]
+    },
+    "EstadoLote": {
+      "description": "Calculado por el sistema (RN-05). null = Pendiente de valorar (RN-12); no es un tercer valor.",
+      "type": ["string", "null"],
+      "enum": ["Aprobado", "Rechazado", null]
+    },
+    "UnDecimal": {
+      "description": "Número con máximo un decimal (RN-09, RN-15). No se usa multipleOf: 0.1 porque la aritmética de punto flotante rechaza valores válidos como 4.5; la aplicación valida el decimal sobre el texto ingresado, con el patrón de x-reglas.rangosEntrada.patronUnDecimal.",
+      "type": "number"
+    },
+
+    "InspeccionVehiculo": {
+      "title": "InspeccionVehiculo",
+      "description": "Datos generales de la llegada del vehículo. Se guarda desde el primer dato, así que los campos que ingresa el inspector pueden ser null mientras el registro está en curso. La completitud se define en x-reglas.inspeccionCompleta (RN-01).",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/UUID",
+          "description": "Identificador de la inspección; lo genera el sistema.",
+          "x-origen": "sistema"
+        },
+        "fecha": {
+          "$ref": "#/$defs/Fecha",
+          "description": "Fecha de entrada; el sistema la toma de la fecha de horaInicio y no se edita.",
+          "x-origen": "sistema"
+        },
+        "horaInicio": {
+          "$ref": "#/$defs/FechaHora",
+          "description": "La asigna el sistema cuando el inspector ingresa el primer dato. No cambia aunque se borre ese dato (CT-03).",
+          "x-origen": "sistema"
+        },
+        "placa": {
+          "description": "Número de placa del vehículo. Se guarda en mayúsculas y sin espacios al inicio o al final (CT-08).",
+          "anyOf": [{ "$ref": "#/$defs/TextoMayusculas" }, { "type": "null" }],
+          "x-origen": "inspector",
+          "x-obligatorio": true
+        },
+        "productor": {
+          "description": "Nombre del productor que entrega la fruta. Se sugieren los nombres ya registrados (CT-10).",
+          "anyOf": [{ "$ref": "#/$defs/TextoNoVacio" }, { "type": "null" }],
+          "x-origen": "inspector",
+          "x-obligatorio": true
+        },
+        "inspector": {
+          "description": "Nombre tomado de la lista que exporta src/config/inspectores.js (x-configuracion.inspectores). Los registros antiguos conservan el nombre aunque ya no esté en la lista (RF-02), por eso no se valida contra la enumeración.",
+          "anyOf": [{ "$ref": "#/$defs/TextoNoVacio" }, { "type": "null" }],
+          "x-origen": "inspector",
+          "x-obligatorio": true
+        },
+        "horaFin": {
+          "description": "La asigna el sistema al presionar Finalizar registro; null mientras el registro está en curso.",
+          "anyOf": [{ "$ref": "#/$defs/FechaHora" }, { "type": "null" }],
+          "x-origen": "sistema"
+        },
+        "chequeoVehiculo": {
+          "description": "true = Cumple, false = No cumple; null hasta que el inspector elige (sin valor por defecto).",
+          "type": ["boolean", "null"],
+          "x-origen": "inspector",
+          "x-obligatorio": true
+        }
+      },
+      "required": ["id", "fecha", "horaInicio", "placa", "productor", "inspector", "horaFin", "chequeoVehiculo"]
+    },
+
+    "LoteMateriaPrima": {
+      "title": "LoteMateriaPrima",
+      "description": "Datos de cada lote recibido en una inspección. Los parámetros que no aplican al producto (RN-06) o que no se valoran porque el vehículo no cumple (RN-07) quedan en null.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/UUID",
+          "description": "Identificador del lote; lo genera el sistema.",
+          "x-origen": "sistema"
+        },
+        "inspeccionId": {
+          "$ref": "#/$defs/UUID",
+          "description": "Clave foránea a InspeccionVehiculo.id (RN-04).",
+          "x-origen": "sistema",
+          "x-referencia": "InspeccionVehiculo.id"
+        },
+        "numeroLote": {
+          "description": "Opcional. Único dentro de la inspección, comparado sin distinguir mayúsculas, espacios ni guiones (RN-16). Se guarda en mayúsculas y sin espacios al inicio o al final (CT-08).",
+          "anyOf": [{ "$ref": "#/$defs/TextoMayusculas" }, { "type": "null" }],
+          "x-origen": "inspector",
+          "x-obligatorio": false
+        },
+        "ordenCompra": {
+          "description": "Opcional. Orden de compra asociada al lote; una sola por lote.",
+          "anyOf": [{ "$ref": "#/$defs/TextoNoVacio" }, { "type": "null" }],
+          "x-origen": "inspector",
+          "x-obligatorio": false
+        },
+        "producto": {
+          "$ref": "#/$defs/Producto",
+          "x-origen": "inspector",
+          "x-obligatorio": true
+        },
+        "dentroCalibre": {
+          "description": "true = Dentro de calibre, false = Fuera de calibre; null hasta que el inspector elige. Aplica a Banano y Plátano.",
+          "type": ["boolean", "null"],
+          "x-origen": "inspector",
+          "x-obligatorio": "condicional (RN-06, RN-07)"
+        },
+        "brix": {
+          "description": "Grados Brix, un decimal. Rango válido de entrada 0.0 a 30.0 (RN-15). Aplica a Banano, Plátano y Malanga.",
+          "anyOf": [
+            { "allOf": [{ "$ref": "#/$defs/UnDecimal" }, { "minimum": 0.0, "maximum": 30.0 }] },
+            { "type": "null" }
+          ],
+          "x-origen": "inspector",
+          "x-obligatorio": "condicional (RN-06, RN-07)"
+        },
+        "temperatura": {
+          "description": "Temperatura interna en °C, un decimal. Rango válido de entrada 0.0 a 50.0 (RN-15). Aplica a todos los productos.",
+          "anyOf": [
+            { "allOf": [{ "$ref": "#/$defs/UnDecimal" }, { "minimum": 0.0, "maximum": 50.0 }] },
+            { "type": "null" }
+          ],
+          "x-origen": "inspector",
+          "x-obligatorio": "condicional (RN-06, RN-07)"
+        },
+        "peso": {
+          "description": "Peso promedio por pieza de una muestra, en gramos, un decimal; el inspector lo calcula y lo digita. Rango válido de entrada 1.0 a 5000.0 (RN-15). Aplica solo a Malanga.",
+          "anyOf": [
+            { "allOf": [{ "$ref": "#/$defs/UnDecimal" }, { "minimum": 1.0, "maximum": 5000.0 }] },
+            { "type": "null" }
+          ],
+          "x-origen": "inspector",
+          "x-obligatorio": "condicional (RN-06, RN-07)"
+        },
+        "estado": {
+          "$ref": "#/$defs/EstadoLote",
+          "x-origen": "sistema"
+        },
+        "observaciones": {
+          "description": "Opcional en todo lote. Comentarios del inspector; el sistema nunca los modifica (RN-08).",
+          "anyOf": [{ "$ref": "#/$defs/TextoNoVacio" }, { "type": "null" }],
+          "x-origen": "inspector",
+          "x-obligatorio": false
+        },
+        "motivoRechazo": {
+          "description": "Lo escribe el sistema cuando estado es Rechazado; null si es Aprobado o está pendiente de valorar. El inspector no lo edita (RN-08).",
+          "type": ["string", "null"],
+          "x-origen": "sistema"
+        }
+      },
+      "required": [
+        "id", "inspeccionId", "numeroLote", "ordenCompra", "producto",
+        "dentroCalibre", "brix", "temperatura", "peso",
+        "estado", "observaciones", "motivoRechazo"
+      ],
+      "allOf": [
+        {
+          "description": "RN-06: Yuca no usa Brix, calibre ni peso.",
+          "if": { "properties": { "producto": { "const": "Yuca" } } },
+          "then": { "properties": { "brix": { "type": "null" }, "dentroCalibre": { "type": "null" }, "peso": { "type": "null" } } }
+        },
+        {
+          "description": "RN-06: Banano y Plátano no usan peso.",
+          "if": { "properties": { "producto": { "enum": ["Banano", "Plátano"] } } },
+          "then": { "properties": { "peso": { "type": "null" } } }
+        },
+        {
+          "description": "RN-06: Malanga no usa calibre.",
+          "if": { "properties": { "producto": { "const": "Malanga" } } },
+          "then": { "properties": { "dentroCalibre": { "type": "null" } } }
+        },
+        {
+          "description": "RN-08: motivoRechazo solo existe cuando el lote está Rechazado.",
+          "if": { "properties": { "estado": { "const": "Rechazado" } } },
+          "then": { "properties": { "motivoRechazo": { "type": "string", "minLength": 1 } } },
+          "else": { "properties": { "motivoRechazo": { "type": "null" } } }
+        }
+      ]
+    }
+  },
+
+  "x-reglas": {
+    "criteriosAprobacion": {
+      "descripcion": "RN-06. Rangos de aprobación por producto; incluyen sus extremos y se comparan sin redondear (RN-05). null = no aplica.",
+      "Banano":  { "brix": { "min": 2, "max": 5 },  "temperatura": { "min": 24, "max": 30 }, "dentroCalibre": true, "peso": null },
+      "Plátano": { "brix": { "min": 2, "max": 8 },  "temperatura": { "min": 24, "max": 30 }, "dentroCalibre": true, "peso": null },
+      "Yuca":    { "brix": null,                    "temperatura": { "min": 24, "max": 30 }, "dentroCalibre": null, "peso": null },
+      "Malanga": { "brix": { "min": 4, "max": 12 }, "temperatura": { "min": 24, "max": 30 }, "dentroCalibre": null, "peso": { "min": 400, "max": 2000, "unidad": "g" } }
+    },
+
+    "rangosEntrada": {
+      "descripcion": "RN-15. Rango válido de entrada para detectar errores de digitación. No se aceptan valores vacíos, negativos ni con más de un decimal.",
+      "patronUnDecimal": "^\\d+(\\.\\d)?$",
+      "brix":        { "min": 0.0, "max": 30.0 },
+      "temperatura": { "min": 0.0, "max": 50.0, "unidad": "°C" },
+      "peso":        { "min": 1.0, "max": 5000.0, "unidad": "g" }
+    },
+
+    "inspeccionCompleta": {
+      "descripcion": "RN-01. La inspección está completa cuando placa, productor, inspector y chequeoVehiculo tienen valor. Si no lo está, la sección de lotes se deshabilita (RN-11, CT-02).",
+      "camposRequeridos": ["placa", "productor", "inspector", "chequeoVehiculo"]
+    },
+
+    "calculoEstado": {
+      "descripcion": "RN-05, RN-07.",
+      "Aprobado": "chequeoVehiculo es true y el lote cumple todos los criterios de su producto.",
+      "Rechazado": "chequeoVehiculo es false, o el lote incumple algún criterio de su producto.",
+      "PendienteDeValorar": "estado null: lotes que quedaron sin parámetros al cambiar chequeoVehiculo de false a true (RN-12)."
+    },
+
+    "vehiculoNoCumple": {
+      "descripcion": "RN-07. Cuando chequeoVehiculo es false: no se valoran los parámetros, que quedan en null y deshabilitados; todos los lotes quedan con estado Rechazado y motivoRechazo indica que el vehículo no cumple con el chequeo. Al pasar de true a false el sistema pide confirmación."
+    },
+
+    "motivoRechazo": {
+      "descripcion": "RN-08. Se recalcula cuando cambian los parámetros o el chequeo y se borra si el lote pasa a Aprobado.",
+      "ejemplo": "No cumple: Brix 6.2 (rango 2 a 5); Temperatura 31.0 °C (rango 24 a 30)"
+    },
+
+    "guardarLote": {
+      "descripcion": "RN-02. Un lote se guarda si la inspección está completa, tiene producto, su numeroLote no se repite en la inspección, sus parámetros aplicables están dentro del rango de entrada cuando chequeoVehiculo es true y tiene estado calculado. Excepción: lotes Pendientes de valorar (RN-12)."
+    },
+
+    "finalizarRegistro": {
+      "descripcion": "RN-03. El registro se finaliza si la inspección está completa, tiene al menos un lote y todos sus lotes tienen estado (ninguno en null). Al finalizar, el sistema asigna horaFin. Si horaFin es anterior a horaInicio se muestra un aviso (CT-04)."
+    },
+
+    "normalizacionBusqueda": {
+      "descripcion": "RN-16, CT-08. Para comparar y buscar placa y numeroLote se ignoran mayúsculas, espacios y guiones: ABC-123, abc123 y ABC 123 son equivalentes.",
+      "transformacion": "eliminar espacios y guiones, convertir a mayúsculas"
+    },
+
+    "consultas": {
+      "porPlaca": "RF-10. Historial de registros finalizados de la placa, del más reciente al más antiguo (CT-09), solo lectura.",
+      "porNumeroLote": "RF-11. Lotes de registros finalizados con ese numeroLote, mostrando fecha, placa y productor; al elegir uno se muestran el lote y su inspección (vía inspeccionId), solo lectura. Los lotes sin numeroLote no aparecen."
+    }
+  }
+}

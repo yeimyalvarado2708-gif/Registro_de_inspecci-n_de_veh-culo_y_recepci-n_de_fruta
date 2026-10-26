@@ -1,0 +1,334 @@
+/* Componentes: estructura, tarjetas, tablas, insignias y segmentados (WF-00 a WF-07). */
+
+/* ---------- Estructura general ---------- */
+.app { display: grid; grid-template-columns: var(--ancho-menu) minmax(0, 1fr); min-height: 100vh; }
+.contenido { display: flex; flex-direction: column; min-width: 0; }
+.principal { padding: var(--espacio-5) var(--espacio-6) var(--espacio-6); }
+
+/* ---------- Menú lateral ---------- */
+.menu-lateral {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  padding: var(--espacio-5) var(--espacio-3);
+  background: var(--color-mostaza);
+  color: var(--color-mostaza-texto);
+  overflow-y: auto;
+}
+.menu-logo { background: #ffffff; border-radius: 12px; padding: var(--espacio-3); }
+.menu-logo img { display: block; width: 100%; height: auto; }
+.menu-area { font-size: 14px; font-weight: 600; padding: 0 var(--espacio-2); }
+.menu-seccion { font-size: 18px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; padding: var(--espacio-2) var(--espacio-2) 0; }
+.menu-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--espacio-1); }
+.menu-enlace {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: 10px var(--espacio-3);
+  border-radius: 8px;
+  color: var(--color-mostaza-texto);
+  text-decoration: none;
+  font-weight: 650;
+}
+.menu-enlace svg { flex: none; width: 20px; height: 20px; }
+.menu-enlace:hover { background: rgba(230, 244, 234, 0.45); }
+.menu-enlace[aria-current="page"] { background: var(--color-mostaza-activo); }
+.menu-enlace:focus-visible { outline-color: var(--color-mostaza-texto); }
+.menu-insignia {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--color-mostaza-texto);
+  font-size: 12px;
+  font-weight: 700;
+}
+.menu-pie { margin-top: auto; border-top: 1px solid rgba(15, 42, 26, 0.25); padding: var(--espacio-3) var(--espacio-2) 0; font-size: 13px; display: flex; flex-direction: column; gap: var(--espacio-2); }
+
+/* ---------- Encabezado del formulario y reloj ---------- */
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espacio-4);
+  padding: var(--espacio-3) var(--espacio-6);
+  background: var(--color-tarjeta);
+  border-bottom: 1px solid var(--color-borde);
+}
+.metadatos { display: flex; border: 1px solid var(--color-borde); border-radius: var(--radio-chico); margin: 0; }
+.metadatos > div { padding: 6px 14px; border-left: 1px solid var(--color-borde); }
+.metadatos > div:first-child { border-left: 0; }
+.metadatos dt { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-texto-suave); font-weight: 700; }
+.metadatos dd { margin: 0; font-weight: 650; font-size: 14px; }
+.reloj { margin-left: auto; text-align: right; }
+.reloj-hora { font-family: var(--fuente-mono); font-size: 22px; font-weight: 700; }
+.reloj-fecha { color: var(--color-texto-suave); font-size: 13.5px; }
+
+/* ---------- Avisos ---------- */
+.zona-avisos { padding: var(--espacio-4) var(--espacio-6) 0; display: flex; flex-direction: column; gap: var(--espacio-2); }
+.zona-avisos:empty { display: none; }
+.aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
+  border-radius: var(--radio-chico);
+  background: var(--color-pendiente-fondo);
+  color: var(--color-pendiente);
+  border: 1px solid #ecd9a6;
+  font-weight: 600;
+}
+.aviso-texto { flex: 1; }
+.aviso-error { background: var(--color-rechazado-fondo); color: var(--color-rechazado); border-color: #f0c8c1; }
+.aviso-exito { background: var(--color-aprobado-fondo); color: var(--color-aprobado); border-color: #bfe0cb; }
+
+/* ---------- Títulos de pantalla ---------- */
+.rotulo { font-size: 13px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-texto-suave); }
+.titulo-pantalla { font-family: var(--fuente-titulo); font-size: 34px; margin: var(--espacio-1) 0 var(--espacio-2); }
+.texto-pantalla { color: var(--color-texto-suave); font-size: 16px; max-width: 760px; margin-bottom: var(--espacio-5); }
+
+/* ---------- Tarjetas ---------- */
+.tarjeta { background: var(--color-tarjeta); border: 1px solid var(--color-borde); border-radius: 14px; box-shadow: var(--sombra); }
+.tarjeta-cabecera { display: flex; align-items: center; gap: var(--espacio-3); padding: var(--espacio-4) var(--espacio-5); border-bottom: 1px solid var(--color-borde); }
+.tarjeta-titulo { font-size: 19px; font-weight: 700; }
+.tarjeta-extra { margin-left: auto; color: var(--color-texto-suave); font-size: 14px; }
+.tarjeta-cuerpo { padding: var(--espacio-5); display: flex; flex-direction: column; gap: var(--espacio-4); }
+
+.paso {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  font-weight: 700;
+  border: 2px solid var(--color-borde-fuerte);
+  color: var(--color-texto-suave);
+}
+.paso[data-completo="true"] { background: var(--color-aprobado); border-color: var(--color-aprobado); color: #ffffff; }
+.paso svg { width: 18px; height: 18px; }
+
+.guardado { display: inline-flex; align-items: center; gap: 6px; }
+.guardado svg { width: 16px; height: 16px; color: var(--color-aprobado); }
+
+/* ---------- Rejillas ---------- */
+.rejilla-registro { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: var(--espacio-5); align-items: start; }
+.columna { display: flex; flex-direction: column; gap: var(--espacio-5); min-width: 0; }
+.fila-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--espacio-4); }
+.fila-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--espacio-4); }
+
+/* Campos «Sistema» con borde punteado (WF-01, WF-02) */
+.sistema {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+  min-height: 44px;
+  padding: 10px 12px;
+  background: var(--color-superficie);
+  border: 1px dashed var(--color-borde-fuerte);
+  border-radius: var(--radio-chico);
+  font-family: var(--fuente-mono);
+}
+.sistema-etiqueta { font-family: var(--fuente-texto); font-size: 12px; color: var(--color-texto-suave); }
+
+/* ---------- Segmentados (radios con estilo de botón) ---------- */
+.segmentado { display: inline-flex; padding: 4px; gap: 4px; background: var(--color-superficie); border: 1px solid var(--color-borde); border-radius: 8px; }
+.segmentado label { position: relative; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: 650; color: var(--color-texto-suave); }
+.segmentado input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.segmentado label:has(input:checked) { background: #ffffff; color: var(--color-texto); box-shadow: var(--sombra); }
+.segmentado label:has(input:focus-visible) { outline: 3px solid var(--color-foco); outline-offset: 1px; }
+.segmentado label:has(input:disabled) { cursor: not-allowed; }
+.segmentado.chequeo label:has(input[value="true"]:checked) { color: var(--color-aprobado); }
+.segmentado.chequeo label:has(input[value="false"]:checked) { color: var(--color-rechazado); }
+
+/* Tarjetas de producto (radios con color) */
+.productos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--espacio-3); }
+.producto-opcion {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: 12px var(--espacio-4);
+  border: 1px solid var(--color-borde-fuerte);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 650;
+  background: #ffffff;
+}
+.producto-opcion input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.producto-opcion:has(input:checked) { border: 2px solid var(--color-primario); background: var(--color-pendiente-fondo); padding: 11px 15px; }
+.producto-opcion:has(input:focus-visible) { outline: 3px solid var(--color-foco); outline-offset: 2px; }
+.producto-opcion:has(input:disabled) { cursor: not-allowed; opacity: 0.7; }
+
+.punto { flex: none; display: inline-block; width: 14px; height: 14px; border-radius: 4px; border: 1px solid rgba(0, 0, 0, 0.2); }
+.punto-Banano { background: var(--color-banano); }
+.punto-Plátano { background: var(--color-platano); }
+.punto-Yuca { background: var(--color-yuca); }
+.punto-Malanga { background: var(--color-malanga); }
+.producto-nombre { display: inline-flex; align-items: center; gap: var(--espacio-2); }
+
+/* ---------- Botones ---------- */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  min-height: 44px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--color-borde-fuerte);
+  background: #ffffff;
+  color: var(--color-texto);
+  font-weight: 650;
+  cursor: pointer;
+  text-decoration: none;
+}
+.boton:hover:not(:disabled) { background: var(--color-superficie); }
+.boton:disabled { cursor: not-allowed; opacity: 0.55; }
+.boton-primario { background: var(--color-primario); border-color: var(--color-primario); color: var(--color-sobre-primario); }
+.boton-primario:hover:not(:disabled) { background: var(--color-primario-hover); }
+.boton-peligro { color: var(--color-rechazado); border-color: #d9a39b; }
+.boton-peligro:hover:not(:disabled) { background: var(--color-rechazado-fondo); }
+.boton-enlace { min-height: 36px; padding: 6px 10px; border: 0; background: transparent; }
+.boton-enlace.peligro { color: var(--color-rechazado); }
+.boton-ancho { width: 100%; }
+.boton svg { width: 18px; height: 18px; }
+.acciones { display: flex; gap: var(--espacio-3); flex-wrap: wrap; }
+
+/* ---------- Insignias ---------- */
+.insignia {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13.5px;
+  white-space: nowrap;
+}
+.insignia::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.insignia-aprobado { background: var(--color-aprobado-fondo); color: var(--color-aprobado); }
+.insignia-rechazado { background: var(--color-rechazado-fondo); color: var(--color-rechazado); }
+.insignia-pendiente, .insignia-en-curso { background: var(--color-pendiente-fondo); color: var(--color-pendiente); }
+.insignia-neutra { background: var(--color-superficie); color: var(--color-texto-suave); }
+
+/* ---------- Tablas ---------- */
+.tabla-contenedor { border: 1px solid var(--color-borde); border-radius: 10px; overflow-x: auto; }
+.tabla { width: 100%; border-collapse: collapse; }
+.tabla thead th {
+  text-align: left;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-texto-suave);
+  background: var(--color-superficie);
+  padding: 12px 16px;
+  font-weight: 800;
+}
+.tabla td, .tabla tbody th { padding: 14px 16px; border-top: 1px solid var(--color-borde); vertical-align: top; text-align: left; }
+.tabla tbody th { font-weight: 650; }
+.tabla tr[data-editando="true"] td { background: var(--color-pendiente-fondo); }
+.tabla .secundario { color: var(--color-texto-suave); font-size: 13.5px; }
+.tabla .acciones-fila { text-align: right; }
+.tabla .acciones-fila .boton-enlace { display: flex; margin-left: auto; }
+.lista-parametros { list-style: none; margin: 0; padding: 0; font-family: var(--fuente-mono); font-size: 14px; color: var(--color-texto-suave); }
+
+/* ---------- Formulario del lote ---------- */
+.formulario-lote { border: 1px solid var(--color-borde-fuerte); border-radius: 12px; overflow: hidden; }
+.formulario-lote[aria-disabled="true"] { opacity: 0.7; }
+.formulario-cabecera { display: flex; align-items: center; justify-content: space-between; padding: var(--espacio-4) var(--espacio-5); background: var(--color-superficie); border-bottom: 1px solid var(--color-borde); }
+.formulario-cabecera h3 { font-size: 18px; }
+.formulario-cuerpo { padding: var(--espacio-5); display: flex; flex-direction: column; gap: var(--espacio-4); }
+.formulario-pie { padding: var(--espacio-4) var(--espacio-5); border-top: 1px solid var(--color-borde); display: flex; flex-direction: column; gap: var(--espacio-3); }
+.estado-visible { font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
+.estado-visible::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.estado-Aprobado { color: var(--color-aprobado); }
+.estado-Rechazado { color: var(--color-rechazado); }
+.estado-Pendiente { color: var(--color-pendiente); }
+.estado-neutro { color: var(--color-texto-suave); }
+.leyenda-rangos { padding: var(--espacio-3) var(--espacio-4); background: var(--color-superficie); border-radius: var(--radio-chico); font-size: 14px; }
+.leyenda-rangos strong { margin-right: 6px; }
+.parametros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--espacio-4); }
+.nota-vehiculo { color: var(--color-rechazado); font-weight: 600; font-size: 14px; }
+.motivo { min-height: 44px; padding: 10px 12px; background: var(--color-superficie); border: 1px dashed var(--color-borde-fuerte); border-radius: var(--radio-chico); }
+.aviso-observaciones { padding: var(--espacio-2) var(--espacio-3); border-radius: var(--radio-chico); background: var(--color-pendiente-fondo); color: var(--color-pendiente); font-size: 13.5px; font-weight: 600; }
+
+.aviso-lote-guardado { display: flex; align-items: center; justify-content: space-between; gap: var(--espacio-4); padding: var(--espacio-4); border-radius: 10px; background: var(--color-aprobado-fondo); color: var(--color-aprobado); font-weight: 600; }
+
+/* Sección bloqueada (REQ-LOT-01, REQ-VAL-20) */
+.seccion-bloqueada { opacity: 0.6; }
+.nota-bloqueo { color: var(--color-texto-suave); font-size: 14px; }
+
+/* ---------- Panel «Estado del registro» ---------- */
+.panel-estado { position: sticky; top: var(--espacio-4); }
+.datos-registro { display: grid; grid-template-columns: auto 1fr; gap: var(--espacio-2) var(--espacio-4); margin: 0; }
+.datos-registro dt { color: var(--color-texto-suave); }
+.datos-registro dd { margin: 0; text-align: right; font-family: var(--fuente-mono); }
+.contadores { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--color-borde); border-radius: 10px; }
+.contador { padding: var(--espacio-3) var(--espacio-2); min-width: 0; border-left: 1px solid var(--color-borde); }
+.contador:first-child { border-left: 0; }
+.contador-numero { display: block; font-size: 26px; font-weight: 800; }
+.contador-etiqueta { color: var(--color-texto-suave); font-size: 12.5px; }
+.contador-aprobados .contador-numero { color: var(--color-aprobado); }
+.contador-rechazados .contador-numero { color: var(--color-rechazado); }
+.contador-pendientes .contador-numero { color: var(--color-pendiente); }
+.condiciones { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--espacio-3); }
+.condicion { display: flex; align-items: center; gap: var(--espacio-3); }
+.marca { flex: none; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--color-borde-fuerte); display: inline-grid; place-items: center; }
+.marca svg { width: 14px; height: 14px; visibility: hidden; }
+.condicion[data-cumple="true"] .marca { background: var(--color-aprobado); border-color: var(--color-aprobado); color: #ffffff; }
+.condicion[data-cumple="true"] .marca svg { visibility: visible; }
+.mensaje-finalizar { color: var(--color-rechazado); font-weight: 600; font-size: 14px; }
+.mensaje-finalizar:empty { display: none; }
+
+/* ---------- Consultas ---------- */
+.barra-busqueda { display: flex; gap: var(--espacio-3); align-items: stretch; margin-bottom: var(--espacio-5); }
+.barra-busqueda .entrada { flex: 1; }
+.resumen-lotes { display: inline-flex; gap: var(--espacio-2); align-items: baseline; }
+.resumen-lotes .aprobados { color: var(--color-aprobado); }
+.resumen-lotes .rechazados { color: var(--color-rechazado); }
+.sin-resultados { padding: var(--espacio-5); color: var(--color-texto-suave); }
+.detalle-datos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--espacio-3) var(--espacio-5); margin: 0; }
+.detalle-datos dt { color: var(--color-texto-suave); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.detalle-datos dd { margin: 0; font-weight: 600; }
+.detalle-lote { border: 1px solid var(--color-borde); border-radius: 10px; padding: var(--espacio-4); display: flex; flex-direction: column; gap: var(--espacio-3); }
+.detalle-lote-cabecera { display: flex; align-items: center; justify-content: space-between; gap: var(--espacio-3); }
+
+/* ---------- Diálogo de confirmación (RNF-05) ---------- */
+.dialogo {
+  border: 0;
+  border-radius: 14px;
+  padding: 0;
+  width: min(520px, 90vw);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  color: var(--color-texto);
+}
+.dialogo::backdrop { background: rgba(15, 42, 26, 0.45); }
+.dialogo-cuerpo { padding: var(--espacio-5); display: flex; flex-direction: column; gap: var(--espacio-3); }
+.dialogo-cuerpo h2 { font-size: 20px; }
+.dialogo-acciones { display: flex; justify-content: flex-end; gap: var(--espacio-3); padding: var(--espacio-4) var(--espacio-5); background: var(--color-superficie); }
+
+/* ---------- Pantallas de 1024 a 1279 px (RNF-07) ---------- */
+@media (max-width: 1279px) {
+  :root { --ancho-menu: 200px; }
+  .menu-lateral { padding: var(--espacio-4) var(--espacio-2); }
+  .menu-enlace { gap: var(--espacio-2); padding: 8px var(--espacio-2); }
+  .encabezado { padding: var(--espacio-2) var(--espacio-4); }
+  .metadatos > div { padding: 4px 8px; }
+  .metadatos dd { font-size: 13px; }
+  .zona-avisos { padding: var(--espacio-3) var(--espacio-4) 0; }
+  .principal { padding: var(--espacio-4); }
+  .titulo-pantalla { font-size: 28px; }
+  .rejilla-registro { grid-template-columns: minmax(0, 1fr) 260px; gap: var(--espacio-4); }
+  .tarjeta-cabecera, .tarjeta-cuerpo { padding-left: var(--espacio-4); padding-right: var(--espacio-4); }
+  .formulario-cabecera, .formulario-cuerpo, .formulario-pie { padding-left: var(--espacio-4); padding-right: var(--espacio-4); }
+  .productos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sistema { flex-wrap: wrap; padding: 8px 10px; }
+  .parametros { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tabla thead th, .tabla td, .tabla tbody th { padding: 10px 10px; }
+  .detalle-datos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

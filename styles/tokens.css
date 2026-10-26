@@ -1,0 +1,54 @@
+/* Tokens de diseño (REQ-UNC-18, RNF-08). Los colores viven solo aquí; el dominio no los conoce.
+   Cada par texto/fondo usado está verificado en tests/contraste.test.js (≥ 4.5:1). */
+:root {
+  /* Identidad: verde empresarial del menú lateral (WF-00, WF-01) */
+  --color-mostaza: #4a9a62;               /* verde empresarial del menú lateral */
+  --color-mostaza-texto: #0a1f13;         /* texto sobre el verde del menú */
+  --color-mostaza-activo: #e6f4ea;        /* fondo de la opción activa del menú */
+  --color-primario: #1d5e3a;              /* botones principales (verde oscuro) */
+  --color-primario-hover: #164d2f;
+  --color-sobre-primario: #ffffff;
+
+  /* Superficies */
+  --color-fondo: #f4f8f5;                 /* verde muy claro */
+  --color-tarjeta: #ffffff;
+  --color-superficie: #e8f1eb;            /* encabezados de tabla, campos «Sistema» */
+  --color-borde: #cfe0d5;
+  --color-borde-fuerte: #93b39f;
+
+  /* Texto */
+  --color-texto: #1b3326;
+  --color-texto-suave: #4d6657;
+
+  /* Estados */
+  --color-aprobado: #2f6b47;
+  --color-aprobado-fondo: #e3f1e8;
+  --color-rechazado: #9a2f25;
+  --color-rechazado-fondo: #fbe9e6;
+  --color-pendiente: #7a5000;
+  --color-pendiente-fondo: #fdf3d7;
+  --color-foco: #1f5fae;
+
+  /* Productos (siempre acompañados del nombre) */
+  --color-banano: #d4b23a;
+  --color-platano: #5e8b3a;
+  --color-yuca: #b08a5e;
+  --color-malanga: #7a5a7e;
+
+  /* Tipografía (fuentes del sistema: sin CDN) */
+  --fuente-texto: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --fuente-titulo: Georgia, "Times New Roman", serif;
+  --fuente-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  /* Espaciado y formas */
+  --espacio-1: 4px;
+  --espacio-2: 8px;
+  --espacio-3: 12px;
+  --espacio-4: 16px;
+  --espacio-5: 24px;
+  --espacio-6: 32px;
+  --radio: 10px;
+  --radio-chico: 6px;
+  --sombra: 0 1px 2px rgba(27, 51, 38, 0.06), 0 2px 8px rgba(27, 51, 38, 0.05);
+  --ancho-menu: 248px;
+}
