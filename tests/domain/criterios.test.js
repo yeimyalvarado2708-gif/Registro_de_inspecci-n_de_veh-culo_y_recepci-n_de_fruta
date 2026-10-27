@@ -8,7 +8,7 @@ import {
   PATRON_UN_DECIMAL, PRODUCTOS, RANGOS_ENTRADA,
 } from '../../src/domain/criterios.js';
 
-const contrato = JSON.parse(readFileSync(new URL('../../data-contract.json', import.meta.url), 'utf8'));
+const contrato = JSON.parse(readFileSync(new URL('../../docs/data-contract.json', import.meta.url), 'utf8'));
 
 /** @param {Record<string, unknown>} o */
 const sinDescripcion = (o) => Object.fromEntries(Object.entries(o).filter(([k]) => k !== 'descripcion' && k !== 'patronUnDecimal'));

@@ -46,6 +46,7 @@ Las pruebas usan un `localStorage` simulado en memoria y cubren:
 ## Estructura del proyecto
 ```
 ├── index.html
+├── tasks.md         Plan de tareas de implementación
 ├── src/
 │   ├── domain/      Reglas puras: valoración, validación, normalización y tiempo
 │   ├── state/       Estado y persistencia (storage.js es el único que toca localStorage)
@@ -54,16 +55,16 @@ Las pruebas usan un `localStorage` simulado en memoria y cubren:
 ├── styles/          tokens, base y componentes
 ├── tests/           domain/, state/, invariantes/, arquitectura, rendimiento
 ├── scripts/         serve.js (servidor estático) y sembrar-demo.js (datos de demostración)
-└── docs/            design.md, tasks.md, checklist-ui.md
+└── docs/            requirements.md, data-contract.json, minuta, design.md, checklist-ui.md y REFLECTION.md
     └── wireframes/  Bocetos 00 a 07
 ```
 
 ## Documentación y fuentes de verdad
 Si dos documentos se contradicen, prevalece el que aparece primero en esta lista.
 
-1. [`requirements.md`](requirements.md): requerimientos en sintaxis EARS (`WHEN … IF … THEN the system SHALL …`), con IDs y una matriz de trazabilidad.
-2. [`data-contract.json`](data-contract.json): JSON Schema de `InspeccionVehiculo` y `LoteMateriaPrima`, que se vinculan por `inspeccionId`.
-3. [`Minuta alimentos bermudez.md`](Minuta%20alimentos%20bermudez.md) y [`docs/wireframes/`](docs/wireframes/): origen de los requerimientos.
+1. [`docs/requirements.md`](docs/requirements.md): requerimientos en sintaxis EARS (`WHEN … IF … THEN the system SHALL …`), con IDs y una matriz de trazabilidad.
+2. [`docs/data-contract.json`](docs/data-contract.json): JSON Schema de `InspeccionVehiculo` y `LoteMateriaPrima`, que se vinculan por `inspeccionId`.
+3. [`docs/Minuta alimentos bermudez.md`](docs/Minuta%20alimentos%20bermudez.md) y [`docs/wireframes/`](docs/wireframes/): origen de los requerimientos.
 
 ## Gobierno de la IA
 - [`CLAUDE.md`](CLAUDE.md) es el archivo de reglas de contexto, equivalente a `.cursorrules` o `system_prompt.md`. Define:
@@ -73,7 +74,7 @@ Si dos documentos se contradicen, prevalece el que aparece primero en esta lista
   - el stack obligatorio;
   - la prohibición de implementar comportamiento que no esté en la especificación.
 - `tests/arquitectura.test.js` verifica automáticamente que el código respete esas reglas.
-- La autoevaluación está en [`REFLECTION.md`](REFLECTION.md).
+- La autoevaluación está en [`docs/REFLECTION.md`](docs/REFLECTION.md).
 
 ## Fuera de alcance (v1.0)
 - Servidor, autenticación o sincronización entre equipos.
