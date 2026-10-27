@@ -4,7 +4,7 @@
 
 | Elemento | Detalle |
 | :---- | :---- |
-| Documento | `docs/tasks.md` |
+| Documento | `tasks.md` |
 | Versión | 1.0.0 |
 | Fecha | 25 de octubre de 2026 |
 | Entradas | `requirements.md` v1.1.0, `docs/design.md` v1.2.0 (DD-01 a DD-13), `data-contract.json` v1.0.0, `docs/wireframes/` 00 a 07, `CLAUDE.md` |
