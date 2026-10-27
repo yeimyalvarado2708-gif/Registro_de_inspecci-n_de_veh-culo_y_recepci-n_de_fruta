@@ -7,7 +7,7 @@
 | Documento | `docs/tasks.md` |
 | Versión | 1.0.0 |
 | Fecha | 25 de octubre de 2026 |
-| Entradas | `requirements.md` v1.1.0, `docs/design.md` v1.2.0 (DD-01 a DD-13), `data-contract.json` v1.0.0, `wireframes/` 00 a 07, `CLAUDE.md` |
+| Entradas | `requirements.md` v1.1.0, `docs/design.md` v1.2.0 (DD-01 a DD-13), `data-contract.json` v1.0.0, `docs/wireframes/` 00 a 07, `CLAUDE.md` |
 | Stack | D-01: HTML, CSS y JavaScript nativo con ES Modules, `// @ts-check` + JSDoc, `node --test`, `scripts/serve.js`. Sin dependencias. |
 
 ---
@@ -42,7 +42,7 @@
 
 - [x] **T-0.1 · Estructura de carpetas.**
   Crear la estructura de `docs/design.md` §5: `assets/`, `styles/`, `scripts/`, `src/config/`, `src/domain/`, `src/state/`, `src/ui/registro/`, `tests/helpers/`, `tests/domain/`, `tests/state/`, `tests/invariantes/`.
-  Copiar `wireframes/00 - Logo Alimentos Bermúdez.png` a `assets/logo-alimentos-bermudez.png`.
+  Copiar `docs/wireframes/00 - Logo Alimentos Bermúdez.png` a `assets/logo-alimentos-bermudez.png`.
   *REQ-TEC-01, REQ-TEC-09, REQ-UNC-18.*
   **Terminado:** la estructura existe y no hay `package.json` con dependencias ni `node_modules`.
 

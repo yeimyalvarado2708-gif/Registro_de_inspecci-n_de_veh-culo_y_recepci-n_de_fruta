@@ -54,8 +54,8 @@ Las pruebas usan un `localStorage` simulado en memoria y cubren:
 ├── styles/          tokens, base y componentes
 ├── tests/           domain/, state/, invariantes/, arquitectura, rendimiento
 ├── scripts/         serve.js (servidor estático) y sembrar-demo.js (datos de demostración)
-├── docs/            design.md, tasks.md, checklist-ui.md
-└── wireframes/      Bocetos 00 a 07
+└── docs/            design.md, tasks.md, checklist-ui.md
+    └── wireframes/  Bocetos 00 a 07
 ```
 
 ## Documentación y fuentes de verdad
@@ -63,7 +63,7 @@ Si dos documentos se contradicen, prevalece el que aparece primero en esta lista
 
 1. [`requirements.md`](requirements.md): requerimientos en sintaxis EARS (`WHEN … IF … THEN the system SHALL …`), con IDs y una matriz de trazabilidad.
 2. [`data-contract.json`](data-contract.json): JSON Schema de `InspeccionVehiculo` y `LoteMateriaPrima`, que se vinculan por `inspeccionId`.
-3. [`Minuta alimentos bermudez.md`](Minuta%20alimentos%20bermudez.md) y [`wireframes/`](wireframes/): origen de los requerimientos.
+3. [`Minuta alimentos bermudez.md`](Minuta%20alimentos%20bermudez.md) y [`docs/wireframes/`](docs/wireframes/): origen de los requerimientos.
 
 ## Gobierno de la IA
 - [`CLAUDE.md`](CLAUDE.md) es el archivo de reglas de contexto, equivalente a `.cursorrules` o `system_prompt.md`. Define:

@@ -71,7 +71,7 @@ Condiciones que deben cumplirse SIEMPRE en los datos guardados en `localStorage`
 ## Fuentes de verdad (en este orden)
 1. `requirements.md`: requerimientos en formato EARS con IDs (REQ-INS, REQ-LOT, REQ-REG, REQ-CON, REQ-UI, REQ-VAL, REQ-PER, REQ-UNC, RNF, REQ-TEC).
 2. `data-contract.json`: nombres de campos, tipos, enums, formatos y `x-reglas`.
-3. `Minuta alimentos bermudez.md` y `wireframes/` (00 a 07).
+3. `Minuta alimentos bermudez.md` y `docs/wireframes/` (00 a 07).
 - La minuta es un registro histórico de la sesión del 16/10/2026. Úsala solo para entender el origen de un requerimiento. Si contradice a `requirements.md`, prevalece `requirements.md`.
 - No inventes comportamiento. Si algo no está en las fuentes, o es una pregunta abierta (P-01 a P-06, sección 13.2), consulta al Head Chef antes de implementar.
 - Los requerimientos marcados como **[Propuesto]** se implementan tal como están escritos, pero se señalan como pendientes de validar con el cliente.

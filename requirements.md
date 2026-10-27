@@ -9,7 +9,7 @@
 | Fecha | 25 de octubre de 2026 |
 | Cliente | Alimentos Bermúdez S.A. |
 | Formulario digitalizado | FO-AS-07, versión 13 (válido desde 08/07/2025, última revisión 08/07/2025, próxima revisión 08/07/2027) |
-| Fuentes | `Minuta alimentos bermudez.md` (sesión del 16/10/2026), `data-contract.json` v1.0.0, carpeta `wireframes/` (00 a 07), decisión técnica D-01 (stack) |
+| Fuentes | `Minuta alimentos bermudez.md` (sesión del 16/10/2026), `data-contract.json` v1.0.0, carpeta `docs/wireframes/` (00 a 07), decisión técnica D-01 (stack) |
 | Elaborado por | Analista de Requerimientos Senior |
 
 ---

@@ -8,7 +8,7 @@
 | Versión | 1.2.0 (decisiones DD-01 a DD-13 aprobadas por el Head Chef el 25/10/2026; DD-08b retirada) |
 | Fecha | 25 de octubre de 2026 |
 | Formulario digitalizado | FO-AS-07, versión 13 |
-| Entradas | `requirements.md` v1.1.0, `data-contract.json` v1.0.0, `wireframes/` 00 a 07, `CLAUDE.md` (lenguaje ubicuo, invariantes INV-01 a INV-20, stack D-01) |
+| Entradas | `requirements.md` v1.1.0, `data-contract.json` v1.0.0, `docs/wireframes/` 00 a 07, `CLAUDE.md` (lenguaje ubicuo, invariantes INV-01 a INV-20, stack D-01) |
 | Enfoque | Spec Driven Development: cada decisión de este documento se justifica con un ID de requerimiento (REQ-XXX), una regla del contrato (`x-reglas`) o un invariante (INV-XX). Lo que no tiene respaldo en las fuentes se registra como **DD-XX (decisión de diseño)** en la sección 14, con su resolución por el Head Chef. |
 
 ---
