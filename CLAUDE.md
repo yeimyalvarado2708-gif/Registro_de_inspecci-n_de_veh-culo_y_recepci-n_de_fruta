@@ -121,7 +121,7 @@ Condiciones que deben cumplirse SIEMPRE en los datos guardados en `localStorage`
 
 ## UI, idioma y accesibilidad
 - Todos los textos, mensajes y errores van en español, junto al campo que los causa e indicando la acción esperada.
-- Se respetan los wireframes: encabezado con el reloj de Costa Rica y sin los metadatos del FO-AS-07 (REQ-UI-01, decisión del Head Chef del 26/10/2026), menú lateral (Operación / Referencia), logotipo y colores por producto (Banano amarillo, Plátano verde, Yuca café claro, Malanga morado).
+- Se respetan los wireframes: encabezado con los metadatos del FO-AS-07 v13 y el reloj de Costa Rica (REQ-UI-01, REQ-UNC-01), menú lateral (Operación / Referencia), logotipo y colores por producto (Banano amarillo, Plátano verde, Yuca café claro, Malanga morado).
 - Cumplimiento de WCAG 2.1 AA: contraste, `<label>` en cada campo, foco visible y navegación por teclado.
 - Los botones de acción se protegen contra el doble clic.
 

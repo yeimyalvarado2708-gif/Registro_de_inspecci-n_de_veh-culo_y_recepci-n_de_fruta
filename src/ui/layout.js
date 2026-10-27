@@ -58,13 +58,26 @@ export function montarMenuLateral(contenedor, store) {
 }
 
 /**
- * Encabezado con el reloj de Costa Rica (REQ-UI-01). Los metadatos del FO-AS-07 no se muestran
- * por decisión del Head Chef del 26/10/2026.
+ * Encabezado con los metadatos del FO-AS-07 v13 y el reloj de Costa Rica (REQ-UI-01, REQ-UNC-01).
+ * Las fechas se muestran en DD/MM/YYYY.
  * @param {HTMLElement} contenedor
  */
 export function montarEncabezado(contenedor) {
+  const datos = [
+    ['Código', FORMULARIO.codigo],
+    ['Versión', String(FORMULARIO.version)],
+    ['Elaborado por', FORMULARIO.elaboradoPor],
+    ['Válido desde', formatoFecha(FORMULARIO.validoDesde)],
+    ['Última revisión', formatoFecha(FORMULARIO.ultimaRevision)],
+    ['Próxima revisión', formatoFecha(FORMULARIO.proximaRevision)],
+  ];
+  const metadatos = crear(
+    'dl',
+    { class: 'metadatos', 'aria-label': `Formulario ${FORMULARIO.codigo}` },
+    datos.map(([termino, valor]) => crear('div', {}, [crear('dt', { text: termino }), crear('dd', { text: valor })]))
+  );
   const reloj = crear('div', { class: 'reloj', id: 'reloj' });
-  contenedor.replaceChildren(reloj);
+  contenedor.replaceChildren(metadatos, reloj);
   return reloj;
 }
 

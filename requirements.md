@@ -38,6 +38,7 @@ Todos los requerimientos funcionales de las secciones 4 a 8 están redactados en
 
 - **WHEN** describe el disparador observable (acción del usuario, carga de página, cambio de dato o evento del sistema).
 - **IF** describe la condición de estado que debe cumplirse para que aplique la respuesta.
+- Cuando la respuesta solo debe aplicarse a un registro en curso, la condición es `IF el registro está en curso`. Es la guarda de RN-10: impide que la respuesta se aplique a un registro finalizado (INV-05).
 - **THEN the system SHALL** describe la respuesta obligatoria y verificable del sistema.
 - Cada requerimiento tiene un identificador único y una línea de **Origen** con su trazabilidad hacia la minuta (RF, RN, CT), el contrato de datos o los wireframes (WF).
 - Los requerimientos marcados como **[Propuesto]** no están explícitos en las fuentes; el analista los agrega para cerrar un vacío y deben validarse con el cliente (ver sección 13).
@@ -120,7 +121,7 @@ WHEN el inspector ingresa el primer dato de la inspección (placa, productor, in
 *Origen: RF-01, RN-01, RN-09, CT-04; WF-01.*
 
 **REQ-INS-02. Inmutabilidad de fecha y horas.**
-WHEN el inspector intenta editar la fecha de entrada, la hora de inicio o la hora de fin IF el registro está en curso THEN the system SHALL mostrar esos campos como de solo lectura con la etiqueta «Sistema» e impedir su modificación.
+WHEN se muestra la sección «Inspección del vehículo» en «Registro de recepción» IF todavía no se ha ingresado el primer dato o el registro está en curso THEN the system SHALL mostrar la fecha de entrada, la hora de inicio y la hora de fin como campos de solo lectura con la etiqueta «Sistema», sin ningún control que permita modificarlos.
 *Origen: RF-01, RN-01; WF-01.*
 
 **REQ-INS-03. Hora de inicio estable.**
@@ -128,7 +129,7 @@ WHEN el inspector borra el primer dato que ingresó IF la inspección ya tiene `
 *Origen: CT-03.*
 
 **REQ-INS-04. Registro de la placa.**
-WHEN el inspector ingresa o modifica el número de placa IF el registro está en curso THEN the system SHALL guardar la placa sin espacios al inicio o al final y convertida a mayúsculas.
+WHEN el inspector ingresa o modifica el número de placa IF el texto tiene al menos un carácter distinto de espacio THEN the system SHALL guardar la placa sin espacios al inicio o al final y convertida a mayúsculas (por ejemplo, « abc-123 » se guarda como «ABC-123»).
 *Origen: RF-01, CT-08, CT-14.*
 
 **REQ-INS-05. Registro del productor con sugerencias.**
@@ -226,7 +227,7 @@ WHEN el inspector cambia el producto de un lote IF el lote ya tenía valores en 
 *Origen: CT-01.*
 
 **REQ-LOT-35. Registro del número de lote.**
-WHEN el inspector guarda un lote con número de lote IF el registro está en curso THEN the system SHALL guardar `numeroLote` sin espacios al inicio o al final y convertido a mayúsculas.
+WHEN el inspector presiona «Guardar lote» IF el número de lote tiene al menos un carácter distinto de espacio THEN the system SHALL guardar `numeroLote` sin espacios al inicio o al final y convertido a mayúsculas (por ejemplo, « lt-25 » se guarda como «LT-25»).
 *Origen: RF-03, CT-08, CT-14; contrato `LoteMateriaPrima.numeroLote`.*
 
 ### 5.2 Valoración automática
@@ -303,7 +304,7 @@ WHEN el inspector presiona «Quitar» en un lote IF el registro está en curso T
 
 **REQ-LOT-28. Confirmación al quitar un lote.**
 WHEN el inspector presiona «Quitar» en un lote IF el lote está guardado THEN the system SHALL pedir confirmación indicando el producto y el número de lote antes de eliminarlo.
-*Origen: RF-12, RNF-05; pregunta P-02 resuelta (Quitar siempre pide confirmación).*
+*Origen: RF-12, RNF-05; pregunta P-02, decisión técnica del Head Chef del 25/10/2026 (Quitar siempre pide confirmación).*
 
 **REQ-LOT-29. Completar un lote Pendiente de valorar.**
 WHEN el inspector completa los parámetros de un lote «Pendiente de valorar» y presiona «Guardar lote» IF los parámetros aplicables están dentro del rango válido de entrada THEN the system SHALL calcular su estado según REQ-LOT-11 o REQ-LOT-12 y guardarlo.
@@ -375,6 +376,10 @@ WHEN se abre o recarga la página de registro IF existe en `localStorage` una in
 WHEN el sistema termina de finalizar o cancelar un registro IF no queda ninguna inspección con `horaFin = null` THEN the system SHALL mostrar la pantalla de registro vacía, sin `horaInicio`, con la sección de lotes deshabilitada y los contadores en cero.
 *Origen: RF-08, RN-14; WF-01.*
 
+**REQ-REG-11. Acciones del registro sin registro en curso.**
+WHEN se muestra el panel «Estado del registro» IF no hay un registro en curso THEN the system SHALL mostrar los botones «Finalizar registro» y «Cancelar registro» deshabilitados.
+*Origen: RN-03, RN-14; WF-01, WF-05.*
+
 ---
 
 ## 7. Requerimientos funcionales · Consulta de registros
@@ -421,15 +426,15 @@ WHEN el sistema muestra resultados o detalles de una consulta IF el registro mos
 
 **REQ-CON-11. Últimas inspecciones finalizadas. [Propuesto]**
 WHEN el inspector está en la pantalla «Consultas» IF no ha ejecutado ninguna búsqueda en el modo seleccionado y no hay un detalle abierto THEN the system SHALL mostrar debajo de la búsqueda las últimas 10 inspecciones de registros finalizados, ordenadas por `horaInicio` de la más reciente a la más antigua, con las mismas columnas y la acción «Ver» de REQ-CON-03, en modo solo lectura; y, si no existe ningún registro finalizado, un mensaje que lo indique.
-*Origen: decisión del Head Chef del 26/10/2026; WF-06; RN-10. Pendiente de validar con el cliente.*
+*Origen: decisión del Head Chef del 26/10/2026; WF-06; RN-10. Pendiente de validar con el cliente (P-08).*
 
 ---
 
 ## 8. Requerimientos funcionales · Interfaz, navegación y pantallas de referencia
 
-**REQ-UI-01. Encabezado del formulario. [Propuesto]**
-WHEN se muestra una pantalla de la aplicación IF la pantalla es «Registro de recepción», «Consultas» o «Criterios de aceptación» THEN the system SHALL mostrar en el encabezado solo el reloj de Costa Rica (REQ-UI-02), sin los metadatos del formulario (Código, Versión, Elaborado por, Válido desde, Última revisión y Próxima revisión).
-*Origen: Minuta «Formulario de referencia»; contrato `x-formulario`; WF-01, WF-06, WF-07. Modificado por decisión del Head Chef del 26/10/2026: los metadatos del FO-AS-07 se quitan del encabezado. Pendiente de validar con el cliente.*
+**REQ-UI-01. Encabezado del formulario.**
+WHEN se muestra una pantalla de la aplicación IF la pantalla es «Registro de recepción», «Consultas» o «Criterios de aceptación» THEN the system SHALL mostrar en el encabezado los metadatos del FO-AS-07 versión 13 (Código, Versión, Elaborado por, Válido desde, Última revisión y Próxima revisión, con fechas en DD/MM/YYYY) junto al reloj de Costa Rica (REQ-UI-02).
+*Origen: Minuta «Formulario de referencia»; contrato `x-formulario`; WF-01, WF-06, WF-07; REQ-UNC-01.*
 
 **REQ-UI-02. Reloj de Costa Rica.**
 WHEN transcurre cada segundo IF la pestaña de la aplicación está visible (`document.visibilityState = 'visible'`) THEN the system SHALL actualizar el reloj del encabezado con la hora (HH:mm:ss) y la fecha (DD/MM/YYYY) del reloj del equipo convertidas a la zona America/Costa_Rica, con la leyenda «Costa Rica».
@@ -575,9 +580,9 @@ WHEN el sistema va a crear una inspección nueva IF ya existe en `localStorage` 
 WHEN el inspector guarda un lote IF el chequeo es «No cumple» THEN the system SHALL guardar el lote con `brix`, `temperatura`, `dentroCalibre` y `peso` en `null` y no exigir ningún parámetro.
 *Origen: RN-07, RN-02.*
 
-**REQ-VAL-29. Pendiente de valorar con parámetros inválidos.**
+**REQ-VAL-29. Pendiente de valorar con parámetros inválidos. [Propuesto]**
 WHEN el inspector presiona «Guardar lote» sobre un lote «Pendiente de valorar» IF algún parámetro aplicable está vacío o fuera del rango válido de entrada THEN the system SHALL mostrar los errores, no guardar los cambios y conservar el lote guardado como «Pendiente de valorar».
-*Origen: RN-02, RN-15; pregunta P-01 resuelta por el Head Chef el 25/10/2026 (se rechaza el guardado).*
+*Origen: RN-02, RN-15; pregunta P-01, respuesta provisional del Head Chef del 25/10/2026 (se rechaza el guardado). Pendiente de validar con el cliente.*
 
 **REQ-VAL-30. Lista de inspectores vacía.**
 WHEN se carga la pantalla de registro IF el archivo de configuración no contiene ningún nombre de inspector válido THEN the system SHALL deshabilitar la lista «Nombre del inspector», mostrar un aviso que indique que no hay inspectores configurados e impedir que la inspección quede completa.
@@ -600,7 +605,7 @@ WHEN el sistema guarda inspecciones o lotes IF el navegador ofrece `localStorage
 *Origen: RF-09, CT-13; contrato `x-almacenamiento.medio`.*
 
 **REQ-PER-02. Guardado de la inspección desde el primer dato.**
-WHEN el inspector ingresa o modifica cualquier campo de la inspección IF el registro está en curso THEN the system SHALL persistir la inspección completa en `localStorage` de inmediato, aunque todavía no esté completa, con los campos sin valor en `null`.
+WHEN el inspector ingresa o modifica cualquier campo de la inspección IF el dato es el primero de la inspección (REQ-INS-01) o el registro ya está en curso THEN the system SHALL persistir la inspección completa en `localStorage` de inmediato, aunque todavía no esté completa, con los campos sin valor en `null`.
 *Origen: RF-09, CT-03; contrato `InspeccionVehiculo`.*
 
 **REQ-PER-03. Guardado del lote al presionar Guardar lote.**
@@ -812,19 +817,23 @@ WHEN se ejecuta `node --test` IF el proyecto no tiene dependencias instaladas (s
 
 - S-01. Un único equipo y navegador se usa para la recepción (CT-13).
 - S-02. El reloj del equipo tiene la fecha y hora correctas. La aplicación siempre las muestra y registra en zona America/Costa_Rica, sin importar la zona configurada en el equipo; no corrige el reloj, solo avisa inconsistencias (CT-04).
-- S-03. No existen roles ni permisos: cualquier persona con acceso al equipo puede operar la aplicación.
+- S-03. No existen roles ni permisos: cualquier persona con acceso al equipo puede operar la aplicación. La minuta no lo menciona; se deduce de RF-02 y RF-09. Pendiente de confirmar con el cliente (P-09).
 
 ### 13.2 Preguntas abiertas para validar con el cliente
 
+Las preguntas tachadas están cerradas. Una **decisión técnica** la toma el equipo y no requiere al cliente. Una respuesta **provisional** se aplica en esta versión, pero su requerimiento queda marcado [Propuesto] hasta que el cliente la confirme.
+
 | ID | Pregunta | Requerimiento afectado |
 | :---- | :---- | :---- |
-| ~~P-01~~ | Si el inspector edita un lote «Pendiente de valorar» y presiona «Guardar lote» con parámetros incompletos, ¿se rechaza el guardado o se permite guardar los parámetros parciales manteniéndolo pendiente? **Resuelta** (Head Chef, 25/10/2026): se rechaza el guardado; el lote sigue Pendiente de valorar sin parámetros. | REQ-VAL-29 |
-| ~~P-02~~ | ¿«Quitar» un lote requiere confirmación? **Resuelta:** sí; Quitar siempre pide confirmación. | REQ-LOT-28 |
-| ~~P-03~~ | ¿Se acepta la coma como separador decimal? **Resuelta** (equipo de desarrollo, 25/10/2026): no; solo se admite punto decimal y la coma muestra error. | REQ-VAL-11 |
-| ~~P-04~~ | ¿Qué debe ocurrir si el navegador bloquea `localStorage`? **Resuelta** (Head Chef, 25/10/2026): se muestra un aviso y se deshabilita el registro de inspecciones; Consultas y Criterios de aceptación siguen abriendo. | REQ-PER-14 |
+| P-01 | Si el inspector edita un lote «Pendiente de valorar» y presiona «Guardar lote» con parámetros incompletos, ¿se rechaza el guardado o se permite guardar los parámetros parciales manteniéndolo pendiente? **Provisional** (Head Chef, 25/10/2026), pendiente de confirmar con el cliente: se rechaza el guardado; el lote sigue Pendiente de valorar sin parámetros. | REQ-VAL-29 |
+| ~~P-02~~ | ¿«Quitar» un lote requiere confirmación? **Decisión técnica** (Head Chef, 25/10/2026): sí; Quitar siempre pide confirmación, como toda acción destructiva (RNF-05). | REQ-LOT-28 |
+| ~~P-03~~ | ¿Se acepta la coma como separador decimal? **Decisión técnica** (equipo de desarrollo, 25/10/2026): no; solo se admite punto decimal y la coma muestra error. | REQ-VAL-11 |
+| ~~P-04~~ | ¿Qué debe ocurrir si el navegador bloquea `localStorage`? **Decisión técnica** (Head Chef, 25/10/2026): se muestra un aviso y se deshabilita el registro de inspecciones; Consultas y Criterios de aceptación siguen abriendo. | REQ-PER-14 |
 | P-05 | ¿Se requiere exportar o respaldar los registros (por ejemplo, a CSV o JSON) para mitigar la limitación de CT-13? | Fuera de alcance actual |
-| ~~P-06~~ | Si el archivo de configuración queda sin inspectores válidos o con nombres repetidos, ¿se bloquea el registro y se depura la lista como se propone? **Resuelta** (Head Chef, 25/10/2026): sí; sin nombres válidos se bloquea el registro con un aviso, y los nombres vacíos o repetidos se depuran sin avisar, conservando la primera aparición. | REQ-VAL-30, REQ-VAL-31 |
-| ~~P-07~~ | Si la aplicación está abierta en varias pestañas, ¿la pestaña en solo lectura recupera la edición con el botón «Continuar en esta pestaña», como se propone? **Resuelta** (Head Chef, 25/10/2026): sí. | REQ-VAL-32 |
+| ~~P-06~~ | Si el archivo de configuración queda sin inspectores válidos o con nombres repetidos, ¿se bloquea el registro y se depura la lista como se propone? **Decisión técnica** (Head Chef, 25/10/2026): sí; sin nombres válidos se bloquea el registro con un aviso, y los nombres vacíos o repetidos se depuran sin avisar, conservando la primera aparición. | REQ-VAL-30, REQ-VAL-31 |
+| ~~P-07~~ | Si la aplicación está abierta en varias pestañas, ¿la pestaña en solo lectura recupera la edición con el botón «Continuar en esta pestaña», como se propone? **Decisión técnica** (Head Chef, 25/10/2026): sí. | REQ-VAL-32 |
+| P-08 | En «Consultas», antes de que el inspector haga una búsqueda, ¿se muestran las últimas 10 inspecciones de registros finalizados, como propone el Head Chef el 26/10/2026? | REQ-CON-11 |
+| P-09 | ¿Basta con que el inspector elija su nombre de la lista, sin usuario ni contraseña, aunque cualquier persona con acceso al equipo pueda registrar a nombre de otro inspector? Si se requiere autenticación, queda fuera de esta versión porque necesita un servidor (REQ-UNC-14). | S-03; REQ-UNC-14 |
 
 ### 13.3 Fuera de alcance (versión 1.0)
 
@@ -858,7 +867,7 @@ WHEN se ejecuta `node --test` IF el proyecto no tiene dependencias instaladas (s
 | RF-15 | REQ-LOT-30 a 34; REQ-UNC-15 |
 | RN-01 | REQ-INS-01, 02, 14; REQ-VAL-22, 30; REQ-UNC-08; REQ-TEC-07 |
 | RN-02 | REQ-INS-13; REQ-LOT-03, 08, 22, 23, 29, 32; REQ-VAL-12, 13, 28, 29 |
-| RN-03 | REQ-LOT-06; REQ-REG-01 a 03 |
+| RN-03 | REQ-LOT-06; REQ-REG-01 a 03, 11 |
 | RN-04 | REQ-LOT-09; REQ-CON-06; REQ-PER-11 |
 | RN-05 | REQ-LOT-11 a 13, 21; REQ-VAL-08, 09; REQ-UNC-03 a 05; REQ-TEC-08 |
 | RN-06 | REQ-LOT-04, 05, 11 a 14; REQ-UI-05; REQ-VAL-08, 09; REQ-PER-07; REQ-UNC-03 |
@@ -869,7 +878,7 @@ WHEN se ejecuta `node --test` IF el proyecto no tiene dependencias instaladas (s
 | RN-11 | REQ-INS-14; REQ-LOT-01; REQ-UNC-13 |
 | RN-12 | REQ-INS-10, 11, 13, 15; REQ-LOT-21, 26, 27, 29, 33; REQ-REG-05; REQ-PER-03, 04 |
 | RN-13 | REQ-REG-09; REQ-VAL-27; REQ-UI-08 |
-| RN-14 | REQ-REG-05 a 08, 10; REQ-PER-10; REQ-UNC-16 |
+| RN-14 | REQ-REG-05 a 08, 10, 11; REQ-PER-10; REQ-UNC-16 |
 | RN-15 | REQ-LOT-23; REQ-UI-05; REQ-VAL-01 a 07, 10, 11, 29; REQ-TEC-08 |
 | RN-16 | REQ-LOT-23; REQ-CON-05; REQ-VAL-14 a 16, 19 |
 | CT-01 | REQ-LOT-10 |
@@ -887,4 +896,4 @@ WHEN se ejecuta `node --test` IF el proyecto no tiene dependencias instaladas (s
 | CT-13 | REQ-UI-06; REQ-PER-01, 14, 16; REQ-UNC-14 |
 | CT-14 | REQ-INS-04; REQ-LOT-08, 35; REQ-CON-02; REQ-VAL-17, 18, 31 |
 | D-01 | REQ-TEC-01 a 10; RNF-01, 02 |
-| Wireframes 00–07 | REQ-INS-14, 16; REQ-LOT-21, 25; REQ-REG-01; REQ-CON-01, 03, 11; REQ-UI-01 a 08; REQ-UNC-18 |
+| Wireframes 00–07 | REQ-INS-14, 16; REQ-LOT-21, 25; REQ-REG-01, 11; REQ-CON-01, 03, 11; REQ-UI-01 a 08; REQ-UNC-18 |

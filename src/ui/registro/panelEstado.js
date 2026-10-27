@@ -69,7 +69,7 @@ export function montarPanelEstado(contenedor, store) {
     if (!resultado.ok && resultado.faltan.length > 0) fijarTexto(mensaje, MENSAJES.finalizarBloqueado(resultado.faltan));
   });
 
-  // «Cancelar registro» (REQ-REG-06, 07, 08).
+  // «Cancelar registro» (REQ-REG-06, 07, 08, 11).
   accionProtegida(cancelar, async () => {
     const { rechazados: cantidad } = seleccionarContadores(store.obtenerEstado());
     const t = MENSAJES.confirmarCancelarRegistro;
@@ -112,6 +112,7 @@ export function montarPanelEstado(contenedor, store) {
     }
     if (!registro) fijarTexto(mensaje, '');
 
+    // REQ-REG-11: sin registro en curso, ambos botones deshabilitados.
     const editable = !!registro && estado.almacenamientoDisponible && !estado.soloLectura;
     fijarHabilitado(finalizar, editable);
     // DD-05: con un lote dañado, «Cancelar registro» es la única acción.
